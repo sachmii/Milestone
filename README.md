@@ -1,4 +1,4 @@
-# Milestone (App still in development)
+# Milestone (still in development)
 
 A modern to-do app built with React for the frontend and Django for the backend. This app allows users to create, edit, mark as complete, and delete tasks. It uses Material UI for a sleek, responsive design and Django REST Framework for the API.
 
