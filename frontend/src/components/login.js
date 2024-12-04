@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 
-const providers = [{ id: "credentials", name: "Username and Password" }];
-
 export const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
