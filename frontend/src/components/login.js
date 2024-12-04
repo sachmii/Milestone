@@ -22,6 +22,8 @@ export const Login = () => {
 				withCredentials: true,
 			});
 
+			console.log(data); // Log the response data for debugging
+
 			localStorage.clear();
 			localStorage.setItem("access_token", data.access);
 			localStorage.setItem("refresh_token", data.refresh);
@@ -31,6 +33,7 @@ export const Login = () => {
 			] = `Bearer ${data["access"]}`;
 			window.location.href = "/";
 		} catch (error) {
+			console.error(error.response); // Log the error response for debugging
 			alert("Login failed. Please check your credentials.");
 		}
 	};

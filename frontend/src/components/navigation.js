@@ -15,7 +15,7 @@ export function Navigation() {
 		if (localStorage.getItem("access_token") !== null) {
 			setIsAuth(true);
 		}
-	}, isAuth);
+	}, []); // Empty dependency array
 
 	const renderAuthButtons = () => {
 		if (isAuth) {

@@ -5,9 +5,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import theme from "./theme";
 import { Login } from "./components/login";
-import { Home } from "./components/Home";
-import { Navigation } from "./components/navigation";
-import { Logout } from "./components/logout";
+import { Home } from "./components/home"; // Ensure correct import path and export
+import { Navigation } from "./components/navigation"; // Ensure correct import path and export
+import { Logout } from "./components/logout"; // Ensure correct import path and export
 
 function App() {
 	return (
