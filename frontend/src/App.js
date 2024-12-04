@@ -1,19 +1,26 @@
-import React, { Component } from "react";
-import { Button, Typography } from "@mui/material";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+
 import theme from "./theme";
+import { Login } from "./components/login";
+import { Home } from "./components/Home";
+import { Navigation } from "./components/navigation";
+import { Logout } from "./components/logout";
 
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<div className="App">
-				<Typography variant="h4">This is the Home Page.</Typography>
-				<Button variant="contained" color="primary">
-					click me
-				</Button>
-			</div>
+			<BrowserRouter>
+				<Navigation></Navigation>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/logout" element={<Logout />} />
+				</Routes>
+			</BrowserRouter>
 		</ThemeProvider>
 	);
 }
