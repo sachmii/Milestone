@@ -9,9 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 
 export function Navigation() {
+	// User is not authenticated by default
 	const [isAuth, setIsAuth] = useState(false);
 
 	useEffect(() => {
+		// if user has access token, he is authenticated
 		if (localStorage.getItem("access_token") !== null) {
 			setIsAuth(true);
 		}

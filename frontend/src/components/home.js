@@ -5,9 +5,11 @@ export const Home = () => {
 	const [message, setMessage] = useState("");
 
 	useEffect(() => {
+		// if user has no access token, redirect to login page
 		if (localStorage.getItem("access_token") === null) {
 			window.location.href = "/login";
 		} else {
+			// if user has access token, fetch data from backend (the data being the message from the home view)
 			(async () => {
 				try {
 					const token = localStorage.getItem("access_token");

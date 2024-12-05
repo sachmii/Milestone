@@ -3,12 +3,16 @@ import axios from "axios";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 
 export const Login = () => {
+	// State variables to store the username and password
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const handleLogin = async (e) => {
+		// Prevents the default behaviour of an event
+		// in this case, the form submission event which reloads the page after submitting the form
 		e.preventDefault();
 
+		// data from the form input fields
 		const user = {
 			username: username,
 			password: password,
@@ -26,9 +30,12 @@ export const Login = () => {
 			localStorage.setItem("access_token", data.access);
 			localStorage.setItem("refresh_token", data.refresh);
 
+			// We make sure that the token is attached to the header of all subsequent requests
 			axios.defaults.headers.common[
 				"Authorization"
 			] = `Bearer ${data["access"]}`;
+
+			// Redirect the user to the home page after successful login
 			window.location.href = "/";
 		} catch (error) {
 			console.error(error.response); // Log the error response for debugging
@@ -60,6 +67,7 @@ export const Login = () => {
 						autoComplete="username"
 						autoFocus
 						value={username}
+						// Update the username state variable when the user types in the input field
 						onChange={(e) => setUsername(e.target.value)}
 					/>
 					<TextField
@@ -72,6 +80,7 @@ export const Login = () => {
 						id="password"
 						autoComplete="current-password"
 						value={password}
+						// Update the password state variable when the user types in the input field
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 					<Button

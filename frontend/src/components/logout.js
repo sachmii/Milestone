@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export const Logout = () => {
+	// syntax (() => { ... })() defines and immediately invokes the function
+	// empty array as the second argument triggers the function to run only once
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -13,6 +16,7 @@ export const Logout = () => {
 					{ headers: { "Content-Type": "application/json" } },
 					{ withCredentials: true }
 				);
+				// logging user out
 				localStorage.clear();
 				axios.defaults.headers.common["Authorization"] = null;
 				window.location.href = "/login";
