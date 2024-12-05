@@ -7,7 +7,7 @@ from .serializers import TaskSerializer
 from .models import Task
 
 
-# For authenticating users:
+# For authenticating users -> Postman "GET - Home Page"
 class HomeView(APIView):
     permission_classes = (IsAuthenticated, )
 
@@ -16,7 +16,8 @@ class HomeView(APIView):
         return Response(content)
     
 
-# For logging out
+# For logging out -> Postman "POST - Logout"
+# Authorization token is access token, body contains refresh token
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated, )
     def post(self, request):
