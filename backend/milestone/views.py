@@ -1,8 +1,9 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import viewsets, status, generics
+from rest_framework import status, generics
 from .serializers import TaskSerializer, RegisterSerializer
 from .models import Task
 from django.contrib.auth.models import User
@@ -35,7 +36,7 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-# Get Tasks
+# Get Tasks for specific user
 class UserTaskList(APIView):
     permission_classes = (IsAuthenticated, )
 
@@ -43,7 +44,25 @@ class UserTaskList(APIView):
         tasks = Task.objects.filter(author=request.user)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        title = request.data.get("title")
+        description = request.data.get("description")
+        completed = request.data.get("completed")
 
+        if not title:
+            return Response({'Error': 'No title was given.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        task = Task.objects.create(
+            author=request.user,
+            title=title,
+            description=description,
+            completed=completed
+        )
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        
 
 class UserListView(APIView):
     permission_classes = (IsAuthenticated, )
