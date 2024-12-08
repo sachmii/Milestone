@@ -5,9 +5,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import theme from "./theme";
 import { Login } from "./components/login";
-import { Home } from "./components/home"; // Ensure correct import path and export
-import { Navigation } from "./components/navigation"; // Ensure correct import path and export
-import { Logout } from "./components/logout"; // Ensure correct import path and export
+import { Home } from "./components/home";
+import { Navigation } from "./components/navigation";
+import { Logout } from "./components/logout";
+import { Register } from "./components/register";
+import { TaskList } from "./components/taskList";
 
 function App() {
 	return (
@@ -19,6 +21,8 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/logout" element={<Logout />} />
+					<Route path="/register" element={<Register />} />
+					<Route path="/tasks" element={<TaskList />} />
 				</Routes>
 			</BrowserRouter>
 		</ThemeProvider>
