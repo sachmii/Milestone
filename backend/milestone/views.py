@@ -36,32 +36,45 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+
 # Get Tasks for specific user
-class UserTaskList(APIView):
+class TaskList(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         tasks = Task.objects.filter(author=request.user)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
-    
-    def post(self, request):
-        title = request.data.get("title")
-        description = request.data.get("description")
-        completed = request.data.get("completed")
 
-        if not title:
-            return Response({'Error': 'No title was given.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        task = Task.objects.create(
-            author=request.user,
-            title=title,
-            description=description,
-            completed=completed
-        )
-        serializer = TaskSerializer(task)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class TaskDetail(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id, author=request.user)
+        except Task.DoesNotExist: 
+            return Response({'Error': 'Task not found.'}, status=status.HTTP_404_NOT_FOUND)
         
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+            title = request.data.get("title")
+            description = request.data.get("description")
+            completed = request.data.get("completed")
+
+            if not title:
+                return Response({'Error': 'No title was given.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            task = Task.objects.create(
+                author=request.user,
+                title=title,
+                description=description,
+                completed=completed
+            )
+            serializer = TaskSerializer(task)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 
 class UserListView(APIView):

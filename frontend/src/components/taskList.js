@@ -4,11 +4,11 @@ import {
 	List,
 	ListItem,
 	ListItemText,
-	TextField,
-	Button,
 	Container,
 	Typography,
 	Box,
+	Card,
+	CardContent,
 } from "@mui/material";
 
 export const TaskList = () => {
@@ -36,9 +36,17 @@ export const TaskList = () => {
 
 	const _renderTasks = () => {
 		return tasks.map((task) => (
-			<ListItem key={task.id}>
-				<ListItemText primary={task.title} secondary={task.description} />
-			</ListItem>
+			<Card variant="outlined" key={task.id}>
+				<CardContent>
+					<Typography variant="h5" component="div">
+						{task.title}
+					</Typography>
+					<Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+						{task.completed ? "Completed" : "Not Completed"}
+					</Typography>
+					<Typography variant="body2">{task.description}</Typography>
+				</CardContent>
+			</Card>
 		));
 	};
 
@@ -55,7 +63,7 @@ export const TaskList = () => {
 				<Typography component="h1" variant="h5">
 					Your Tasks
 				</Typography>
-				<List>{_renderTasks()}</List>
+				<Container maxWidth="xs">{_renderTasks()}</Container>
 			</Box>
 		</Container>
 	);
