@@ -10,6 +10,7 @@ import {
 	Card,
 	CardContent,
 } from "@mui/material";
+import "../fonts.css"; // Import the CSS file with the font
 
 export const TaskList = () => {
 	const [tasks, setTasks] = useState([]); // Initialize as an array
@@ -38,7 +39,11 @@ export const TaskList = () => {
 		return tasks.map((task) => (
 			<Card variant="outlined" key={task.id}>
 				<CardContent>
-					<Typography variant="h5" component="div">
+					<Typography
+						variant="h5"
+						component="div"
+						sx={{ fontFamily: "Gamja Flower" }}
+					>
 						{task.title}
 					</Typography>
 					<Typography sx={{ color: "text.secondary", mb: 1.5 }}>
@@ -60,7 +65,12 @@ export const TaskList = () => {
 					alignItems: "center",
 				}}
 			>
-				<Typography component="h1" variant="h5">
+				<Typography
+					component="h1"
+					variant="h5"
+					color="primary"
+					sx={{ mb: 2, fontFamily: "Gamja Flower" }}
+				>
 					Your Tasks
 				</Typography>
 				<Container maxWidth="xs">{_renderTasks()}</Container>
