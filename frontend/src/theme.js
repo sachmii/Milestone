@@ -19,7 +19,7 @@ const theme = createTheme({
 	typography: {
 		fontFamily: "'Gamja Flower', 'Roboto', sans-serif", // Add Gamja Flower as the primary font
 		h1: {
-			fontWeight: 900, // Bold headers
+			fontWeight: 700, // Bold headers
 		},
 		h2: {
 			fontWeight: 600, // Slightly lighter header

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-	List,
-	ListItem,
-	ListItemText,
+	Checkbox,
 	Container,
 	Typography,
 	Box,
 	Card,
 	CardContent,
+	FormControlLabel,
 } from "@mui/material";
 import "../fonts.css"; // Import the CSS file with the font
 
@@ -35,6 +34,30 @@ export const TaskList = () => {
 		getTasks();
 	}, []);
 
+	const _handleCheckboxChange = async (taskId, checked) => {
+		try {
+			const token = localStorage.getItem("access_token");
+			await axios.patch(
+				`http://localhost:8000/tasks/${taskId}`,
+				{ completed: checked },
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			setTasks((prevTasks) =>
+				prevTasks.map((task) =>
+					task.id === taskId ? { ...task, completed: checked } : task
+				)
+			);
+		} catch (e) {
+			console.log("Error when updating task.");
+			alert("There was an error when updating the task.");
+		}
+	};
+
 	const _renderTasks = () => {
 		return tasks.map((task) => (
 			<Card variant="outlined" key={task.id}>
@@ -46,9 +69,23 @@ export const TaskList = () => {
 					>
 						{task.title}
 					</Typography>
-					<Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-						{task.completed ? "Completed" : "Not Completed"}
-					</Typography>
+					<Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={task.completed}
+									onChange={(e) =>
+										_handleCheckboxChange(task.id, e.target.checked)
+									}
+								/>
+							}
+							label={
+								<Typography sx={{ color: "text.secondary", fontSize: 16 }}>
+									{task.completed ? "Completed" : "Not Completed"}
+								</Typography>
+							}
+						/>
+					</Box>
 					<Typography variant="body2">{task.description}</Typography>
 				</CardContent>
 			</Card>
@@ -67,7 +104,7 @@ export const TaskList = () => {
 			>
 				<Typography
 					component="h1"
-					variant="h5"
+					variant="h4"
 					color="primary"
 					sx={{ mb: 2, fontFamily: "Gamja Flower" }}
 				>
