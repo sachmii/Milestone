@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Typography, Box } from "@mui/material";
+import { IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import TaskCard from "./taskCard";
 import "../fonts.css"; // Import the CSS file with the font
 
@@ -37,12 +39,7 @@ export const TaskList = () => {
 					alignItems: "center",
 				}}
 			>
-				<Typography
-					component="h1"
-					variant="h5"
-					color="primary"
-					sx={{ mb: 2, fontFamily: "Gamja Flower" }}
-				>
+				<Typography component="h1" variant="h5" color="primary">
 					Your Tasks
 				</Typography>
 				<Container maxWidth="xs">
@@ -50,6 +47,20 @@ export const TaskList = () => {
 						<TaskCard key={task.id} task={task} setTasks={setTasks} />
 					))}
 				</Container>
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "space-between",
+					}}
+				>
+					<Typography variant="h8" color="textSecondary" align="center">
+						Add a new task
+					</Typography>
+					<IconButton color="secondary" aria-label="add task">
+						<AddIcon />
+					</IconButton>
+				</Box>
 			</Box>
 		</Container>
 	);
