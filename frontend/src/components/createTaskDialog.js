@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import "../fonts.css";
 
-export const TaskDialog = ({ open, setOpen, setTasks }) => {
+export const CreateTaskDialog = ({ open, setOpen, setTasks }) => {
 	const [open, setOpen] = useState(false); // State to manage dialog open/close
 	const [newTask, setNewTask] = useState({ title: "", description: "" }); // State to manage new task input
 
@@ -46,4 +46,6 @@ export const TaskDialog = ({ open, setOpen, setTasks }) => {
 			alert("There was an error when creating the task.");
 		}
 	};
+
+	// add dialog for creating task
 };
