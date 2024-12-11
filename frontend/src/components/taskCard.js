@@ -12,9 +12,12 @@ import {
 import axios from "axios";
 
 const TaskCard = ({ task, setTasks }) => {
-	const [editTaskId, setEditTaskId] = useState(null);
+	const [editTaskIdTitle, setEditTaskIdTitle] = useState(null);
+	const [editTaskIdDescription, setEditTaskIdDescription] = useState(null);
 	const [editTaskTitle, setEditTaskTitle] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [editTaskDescription, setEditTaskDescription] = useState("");
+	const [loadingTitle, setLoadingTitle] = useState(false);
+	const [loadingDescription, setLoadingDescription] = useState(false);
 
 	const _handleCheckboxChange = async (taskId, checked) => {
 		try {
@@ -40,13 +43,13 @@ const TaskCard = ({ task, setTasks }) => {
 		}
 	};
 
-	const _handleEditClick = (taskId, currentTitle) => {
-		setEditTaskId(taskId);
+	const _handleTitleEditClick = (taskId, currentTitle) => {
+		setEditTaskIdTitle(taskId);
 		setEditTaskTitle(currentTitle);
 	};
 
-	const _handleSaveClick = async (taskId) => {
-		setLoading(true);
+	const _handleTitleSaveClick = async (taskId) => {
+		setLoadingTitle(true);
 		try {
 			const token = localStorage.getItem("access_token");
 			await axios.patch(
@@ -64,52 +67,114 @@ const TaskCard = ({ task, setTasks }) => {
 					task.id === taskId ? { ...task, title: editTaskTitle } : task
 				)
 			);
-			setEditTaskId(null);
+			setEditTaskIdTitle(null);
 			setEditTaskTitle("");
 		} catch (e) {
 			console.log("Error when updating task.");
 			alert("There was an error when updating the task.");
 		}
-		setLoading(false);
+		setLoadingTitle(false);
+	};
+
+	const _handleDescriptionEditClick = (taskId, currentDescription) => {
+		setEditTaskIdDescription(taskId);
+		setEditTaskDescription(currentDescription);
+	};
+
+	const _handleDescriptionSaveClick = async (taskId) => {
+		setLoadingDescription(true);
+		try {
+			const token = localStorage.getItem("access_token");
+			await axios.patch(
+				`http://localhost:8000/tasks/${taskId}`,
+				{ description: editTaskDescription },
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			setTasks((prevTasks) =>
+				prevTasks.map((task) =>
+					task.id === taskId
+						? { ...task, description: editTaskDescription }
+						: task
+				)
+			);
+			setEditTaskIdDescription(null);
+			setEditTaskDescription("");
+		} catch (e) {
+			console.log("Error when updating task.");
+			alert("There was an error when updating the task.");
+		}
+		setLoadingDescription(false);
 	};
 
 	const renderTitle = () => {
-		if (editTaskId === task.id) {
+		if (editTaskIdTitle === task.id) {
 			return (
 				<TextField
 					value={editTaskTitle}
 					onChange={(e) => setEditTaskTitle(e.target.value)}
 					variant="outlined"
 					size="small"
-					sx={{ fontFamily: "Gamja Flower" }}
-					disabled={loading} // Disable the input field while loading
+					disabled={loadingTitle} // Disable the input field while loading
 				/>
 			);
 		}
 		return (
-			<Typography
-				variant="h6"
-				component="div"
-				sx={{ fontFamily: "Gamja Flower" }}
-			>
+			<Typography variant="h6" component="div">
 				{task.title}
 			</Typography>
 		);
 	};
 
-	const renderIconButton = () => (
+	const renderDescription = () => {
+		if (editTaskIdDescription === task.id) {
+			return (
+				<TextField
+					value={editTaskDescription}
+					onChange={(e) => setEditTaskDescription(e.target.value)}
+					variant="outlined"
+					size="small"
+					disabled={loadingDescription} // Disable the input field while loading
+				/>
+			);
+		}
+		return <Typography variant="body2">{task.description}</Typography>;
+	};
+
+	const renderIconButtonTitle = () => (
 		<IconButton
 			onClick={() =>
-				editTaskId === task.id
-					? _handleSaveClick(task.id)
-					: _handleEditClick(task.id, task.title)
+				editTaskIdTitle === task.id
+					? _handleTitleSaveClick(task.id)
+					: _handleTitleEditClick(task.id, task.title)
 			}
-			disabled={loading} // Disable the button while loading
+			disabled={loadingTitle} // Disable the button while loading
 		>
-			{editTaskId === task.id ? (
-				<img src="/save.png" alt="Save" style={{ width: 20, height: 20 }} />
+			{editTaskIdTitle === task.id ? (
+				<img src="/save.png" alt="Save" style={{ width: 16, height: 16 }} />
 			) : (
-				<img src="/pencil.png" alt="Edit" style={{ width: 20, height: 20 }} />
+				<img src="/pencil.png" alt="Edit" style={{ width: 16, height: 16 }} />
+			)}
+		</IconButton>
+	);
+
+	const renderIconButtonDescription = () => (
+		<IconButton
+			onClick={() =>
+				editTaskIdDescription === task.id
+					? _handleDescriptionSaveClick(task.id)
+					: _handleDescriptionEditClick(task.id, task.description)
+			}
+			disabled={loadingDescription} // Disable the button while loading
+		>
+			{editTaskIdDescription === task.id ? (
+				<img src="/save.png" alt="Save" style={{ width: 16, height: 16 }} />
+			) : (
+				<img src="/pencil.png" alt="Edit" style={{ width: 16, height: 16 }} />
 			)}
 		</IconButton>
 	);
@@ -141,12 +206,21 @@ const TaskCard = ({ task, setTasks }) => {
 					}}
 				>
 					{renderTitle()}
-					{renderIconButton()}
+					{renderIconButtonTitle()}
 				</Box>
 				<Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
 					{renderCheckbox()}
 				</Box>
-				<Typography variant="body2">{task.description}</Typography>
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "space-between",
+					}}
+				>
+					{renderDescription()}
+					{renderIconButtonDescription()}
+				</Box>
 			</CardContent>
 		</Card>
 	);
