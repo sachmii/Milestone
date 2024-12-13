@@ -4,7 +4,7 @@ import { Container, Typography, Box } from "@mui/material";
 import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import TaskCard from "./taskCard";
-import { CreateTaskDialog } from "./createTaskDialog";
+import CreateTaskDialog from "./createTaskDialog";
 import "../fonts.css"; // Import the CSS file with the font
 
 export const TaskList = () => {
@@ -45,12 +45,17 @@ export const TaskList = () => {
 					alignItems: "center",
 				}}
 			>
-				<Typography component="h1" variant="h5" color="primary">
+				<Typography
+					component="h1"
+					variant="h5"
+					color="primary"
+					marginBottom={2}
+				>
 					Your Tasks
 				</Typography>
 				<Container maxWidth="xs">
 					{tasks.map((task) => (
-						<TaskCard key={task.id} task={task} setTasks={setTasks} />
+						<TaskCard key={task.id} task={task} setTasks={setTasks} margin />
 					))}
 				</Container>
 				<Box

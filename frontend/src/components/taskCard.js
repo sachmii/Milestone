@@ -8,8 +8,11 @@ import {
 	TextField,
 	IconButton,
 	Typography,
+	Divider,
 } from "@mui/material";
 import axios from "axios";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteConfirmationDialog from "./deleteConfirmationDialog";
 
 const TaskCard = ({ task, setTasks }) => {
 	const [editTaskIdTitle, setEditTaskIdTitle] = useState(null);
@@ -18,6 +21,7 @@ const TaskCard = ({ task, setTasks }) => {
 	const [editTaskDescription, setEditTaskDescription] = useState("");
 	const [loadingTitle, setLoadingTitle] = useState(false);
 	const [loadingDescription, setLoadingDescription] = useState(false);
+	const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
 	const _handleCheckboxChange = async (taskId, checked) => {
 		try {
@@ -111,6 +115,23 @@ const TaskCard = ({ task, setTasks }) => {
 		setLoadingDescription(false);
 	};
 
+	const _handleDelete = async () => {
+		try {
+			const token = localStorage.getItem("access_token");
+			await axios.delete(`http://localhost:8000/tasks/${task.id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id));
+			setOpenConfirmDialog(false);
+		} catch (e) {
+			console.log("Error when deleting task.");
+			alert("There was an error when deleting the task.");
+		}
+	};
+
 	const renderTitle = () => {
 		if (editTaskIdTitle === task.id) {
 			return (
@@ -196,32 +217,65 @@ const TaskCard = ({ task, setTasks }) => {
 	);
 
 	return (
-		<Card variant="outlined" key={task.id}>
+		<Card
+			variant="outlined"
+			key={task.id}
+			sx={{ mb: 2, p: 2, borderRadius: 2, boxShadow: 3 }}
+		>
 			<CardContent>
 				<Box
 					sx={{
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "space-between",
+						mb: 2,
 					}}
 				>
 					{renderTitle()}
 					{renderIconButtonTitle()}
 				</Box>
-				<Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
+				<Divider />
+				<Box sx={{ display: "flex", alignItems: "center", mb: 2, mt: 2 }}>
 					{renderCheckbox()}
 				</Box>
+				<Divider />
 				<Box
 					sx={{
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "space-between",
+						mt: 2,
 					}}
 				>
 					{renderDescription()}
 					{renderIconButtonDescription()}
 				</Box>
+				<Divider sx={{ mt: 2 }} />
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "flex-end",
+						mt: 2,
+					}}
+				>
+					<Typography variant="body2" color="textSecondary" sx={{ mr: 1 }}>
+						Delete Task
+					</Typography>
+					<IconButton
+						color="secondary"
+						aria-label="delete task"
+						onClick={() => setOpenConfirmDialog(true)}
+					>
+						<DeleteIcon />
+					</IconButton>
+				</Box>
 			</CardContent>
+			<DeleteConfirmationDialog
+				open={openConfirmDialog}
+				onClose={() => setOpenConfirmDialog(false)}
+				onConfirm={_handleDelete}
+			/>
 		</Card>
 	);
 };

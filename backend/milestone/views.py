@@ -72,6 +72,14 @@ class TaskDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id, author=request.user)
+            task.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Task.DoesNotExist:
+            return Response({'Error': 'Task not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class CreateTask(APIView):
     permission_classes = (IsAuthenticated, )

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import "../fonts.css";
 
-export const CreateTaskDialog = ({ open, setOpen, setTasks }) => {
+const CreateTaskDialog = ({ open, setOpen, setTasks }) => {
 	const [newTask, setNewTask] = useState({ title: "", description: "" }); // State to manage new task input
 
 	const handleClose = () => {
@@ -59,14 +59,19 @@ export const CreateTaskDialog = ({ open, setOpen, setTasks }) => {
 			PaperProps={{
 				component: "form",
 				style: {
-					backgroundColor: "#c7dbff",
-					borderRadius: 10,
+					background: "linear-gradient(to right bottom, #c7dbff, #ffbae1)",
+					borderRadius: 15,
+					padding: "20px",
 				},
 			}}
 		>
-			<DialogTitle>Create New Task</DialogTitle>
+			<DialogTitle style={{ textAlign: "center", fontWeight: "bold" }}>
+				Create New Task
+			</DialogTitle>
 			<DialogContent>
-				<DialogContentText>
+				<DialogContentText
+					style={{ marginBottom: "20px", textAlign: "center" }}
+				>
 					Please enter the details of the new task you want to create.
 				</DialogContentText>
 				<TextField
@@ -75,27 +80,34 @@ export const CreateTaskDialog = ({ open, setOpen, setTasks }) => {
 					label="Title"
 					type="text"
 					fullWidth
-					variant="standard"
+					variant="outlined"
 					value={newTask.title}
 					onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+					style={{ marginBottom: "20px" }}
 				/>
 				<TextField
-					autoFocus
 					margin="dense"
 					label="Description"
 					type="text"
 					fullWidth
-					variant="standard"
+					variant="outlined"
 					value={newTask.description}
 					onChange={(e) =>
 						setNewTask({ ...newTask, description: e.target.value })
 					}
+					style={{ marginBottom: "20px" }}
 				/>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleClose}>Cancel</Button>
-				<Button onClick={handleAddTask}>Create</Button>
+			<DialogActions style={{ justifyContent: "center" }}>
+				<Button onClick={handleClose} variant="contained" color="secondary">
+					Cancel
+				</Button>
+				<Button onClick={handleAddTask} variant="contained" color="primary">
+					Create
+				</Button>
 			</DialogActions>
 		</Dialog>
 	);
 };
+
+export default CreateTaskDialog;
