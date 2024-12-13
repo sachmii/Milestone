@@ -9,6 +9,7 @@ from .models import Task
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 
+
 # For registering users
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
@@ -59,6 +60,22 @@ class TaskDetail(APIView):
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def patch(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id, author=request.user)
+        except Task.DoesNotExist:
+            return Response({'Error': 'Task not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = TaskSerializer(task, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateTask(APIView):
+    permission_classes = (IsAuthenticated, )
+
     def post(self, request):
         title = request.data.get("title")
         description = request.data.get("description")
@@ -75,18 +92,6 @@ class TaskDetail(APIView):
         )
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def patch(self, request, task_id):
-        try:
-            task = Task.objects.get(id=task_id, author=request.user)
-        except Task.DoesNotExist:
-            return Response({'Error': 'Task not found.'}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = TaskSerializer(task, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserListView(APIView):

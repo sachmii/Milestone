@@ -4,10 +4,12 @@ import { Container, Typography, Box } from "@mui/material";
 import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import TaskCard from "./taskCard";
+import { CreateTaskDialog } from "./createTaskDialog";
 import "../fonts.css"; // Import the CSS file with the font
 
 export const TaskList = () => {
 	const [tasks, setTasks] = useState([]); // Initialize as an array
+	const [open, setOpen] = useState(false); // State to manage dialog open/close
 
 	useEffect(() => {
 		const getTasks = async () => {
@@ -28,6 +30,10 @@ export const TaskList = () => {
 
 		getTasks();
 	}, []);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
 
 	return (
 		<Container maxWidth="sm">
@@ -57,11 +63,16 @@ export const TaskList = () => {
 					<Typography variant="h8" color="textSecondary" align="center">
 						Add a new task
 					</Typography>
-					<IconButton color="secondary" aria-label="add task">
+					<IconButton
+						color="secondary"
+						aria-label="add task"
+						onClick={handleClickOpen}
+					>
 						<AddIcon />
 					</IconButton>
 				</Box>
 			</Box>
+			<CreateTaskDialog open={open} setOpen={setOpen} setTasks={setTasks} />
 		</Container>
 	);
 };
